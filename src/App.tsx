@@ -9,7 +9,7 @@ import MenuPortfolio from '@/components/menu.tsx';
 const Portfolio = () => {
 
   const [activeSection, setActiveSection] = useState('accueil');
-  const [expandedComp, setExpandedComp] = useState<string | null>(null);
+  const [expandedComps, setExpandedComps] = useState<Set<string>>(new Set());
   
   // États pour le formulaire
   const [formData, setFormData] = useState({
@@ -17,6 +17,17 @@ const Portfolio = () => {
     email: '',
     message: ''
   });
+
+  // Fonction pour basculer l'expansion d'une compétence
+  const toggleCompetence = (compId: string) => {
+    const newExpanded = new Set(expandedComps);
+    if (newExpanded.has(compId)) {
+      newExpanded.delete(compId);
+    } else {
+      newExpanded.add(compId);
+    }
+    setExpandedComps(newExpanded);
+  };
 
   // Fonction pour obtenir les projets liés à une compétence
   const getProjetsParCompetence = (compId: Competence['id']) => {
@@ -230,7 +241,8 @@ const Portfolio = () => {
               // Déterminer le dernier niveau disponible
               const niveauFinal = comp.evolution.but3 || comp.evolution.but2;
               const levelBut = comp.evolution.but3 ? 'but3' : 'but2';
-              const isExpanded = expandedComp === comp.id;
+              const isExpanded = expandedComps.has(comp.id);
+              const hasMultipleLevels = comp.evolution.but3 ? true : false;
               
               return (
                 <Box 
@@ -239,28 +251,29 @@ const Portfolio = () => {
                   borderColor={comp.color}
                   borderRadius="lg"
                   p={6}
-                  _hover={{ boxShadow: 'lg' }}
-                  transition="all"
+                  _hover={{ boxShadow: 'lg', borderColor: comp.color }}
+                  transition="all 0.3s"
+                  bg="white"
                 >
-                  <Heading as="h3" size="md" color="gray.600" mb={4}>
+                  <Heading as="h3" size="md" color="accent.800" mb={4} fontWeight="700">
                     {comp.titre}
                   </Heading>
-                  <Text fontSize="sm" color="gray.600" mb={6}>
+                  <Text fontSize="sm" color="accent.600" mb={6}>
                     {comp.description}
                   </Text>
 
                   {/* Affichage du dernier niveau (replié par défaut) */}
                   <VStack align="stretch" gap={4} mb={6}>
-                    <Box borderLeft="4px solid" borderLeftColor="green.300" pl={4}>
+                    <Box borderLeft="4px solid" borderLeftColor="success.500" pl={4} py={3} bg="success.50" borderRadius="md">
                       <HStack gap={2} mb={2}>
-                        <Badge colorScheme="green" fontSize="xs">
+                        <Badge colorScheme="green" fontSize="xs" fontWeight="bold">
                           {levelBut === 'but3' ? 'BUT3 (Actuel)' : 'BUT2 (Actuel)'}
                         </Badge>
-                        <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                        <Text fontSize="sm" fontWeight="bold" color="success.700">
                           {niveauFinal.niveau}
                         </Text>
                       </HStack>
-                      <Text fontSize="xs" color="gray.600">
+                      <Text fontSize="xs" color="accent.700" lineHeight="1.5">
                         {niveauFinal.apprentissages}
                       </Text>
                     </Box>
@@ -268,34 +281,38 @@ const Portfolio = () => {
                     {/* Section dépliable - Evolution complète */}
                     {isExpanded && (
                       <>
-                        <Text textAlign="center" color="gray.400" fontSize="lg">↑</Text>
+                        {/* Flèche unique si 2 niveaux, 2 flèches si 3 niveaux */}
+                        <Text textAlign="center" color="accent.400" fontSize="lg" fontWeight="bold">↑</Text>
 
                         {/* BUT2 (si on est en BUT3) */}
                         {comp.evolution.but3 && (
-                          <Box borderLeft="4px solid" borderLeftColor="amber.300" pl={4}>
+                          <Box borderLeft="4px solid" borderLeftColor="primary.400" pl={4} py={3} bg="primary.50" borderRadius="md">
                             <HStack gap={2} mb={2}>
-                              <Badge colorScheme="orange" fontSize="xs">BUT2</Badge>
-                              <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                              <Badge colorScheme="blue" fontSize="xs" fontWeight="bold">BUT2</Badge>
+                              <Text fontSize="sm" fontWeight="bold" color="primary.700">
                                 {comp.evolution.but2.niveau}
                               </Text>
                             </HStack>
-                            <Text fontSize="xs" color="gray.600">
+                            <Text fontSize="xs" color="accent.700" lineHeight="1.5">
                               {comp.evolution.but2.apprentissages}
                             </Text>
                           </Box>
                         )}
 
-                        <Text textAlign="center" color="gray.400" fontSize="lg">↑</Text>
+                        {/* Deuxième flèche seulement si 3 niveaux */}
+                        {hasMultipleLevels && (
+                          <Text textAlign="center" color="accent.400" fontSize="lg" fontWeight="bold">↑</Text>
+                        )}
 
                         {/* BUT1 */}
-                        <Box borderLeft="4px solid" borderLeftColor="blue.300" pl={4}>
+                        <Box borderLeft="4px solid" borderLeftColor="primary.300" pl={4} py={3} bg="primary.100" borderRadius="md">
                           <HStack gap={2} mb={2}>
-                            <Badge colorScheme="blue" fontSize="xs">BUT1</Badge>
-                            <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                            <Badge colorScheme="cyan" fontSize="xs" fontWeight="bold">BUT1</Badge>
+                            <Text fontSize="sm" fontWeight="bold" color="primary.900">
                               {comp.evolution.but1.niveau}
                             </Text>
                           </HStack>
-                          <Text fontSize="xs" color="gray.600">
+                          <Text fontSize="xs" color="accent.700" lineHeight="1.5">
                             {comp.evolution.but1.apprentissages}
                           </Text>
                         </Box>
@@ -305,7 +322,7 @@ const Portfolio = () => {
 
                   {/* Bouton pour déployer */}
                   <Button
-                    onClick={() => setExpandedComp(isExpanded ? null : comp.id)}
+                    onClick={() => toggleCompetence(comp.id)}
                     variant="ghost"
                     size="sm"
                     w="full"
@@ -315,9 +332,11 @@ const Portfolio = () => {
                     display="flex"
                     justifyContent="center"
                     gap={2}
+                    fontWeight="600"
+                    transition="all 0.3s"
                   >
                     <Text>
-                      {isExpanded ? 'Masquer l\'évolution' : 'Voir l\'évolution complète'}
+                      {isExpanded ? 'Masquer l\'évolution' : 'Voir l\'évolution'}
                     </Text>
                     <Box
                       as={MdKeyboardArrowDown}
@@ -329,12 +348,12 @@ const Portfolio = () => {
 
                   <HStack flexWrap="wrap" gap={2} mb={4}>
                     {comp.technos.map(tech => (
-                      <Badge key={tech} variant="subtle" fontSize="xs">
+                      <Badge key={tech} variant="subtle" fontSize="xs" bg="sage.100" color="sage.700">
                         {tech}
                       </Badge>
                     ))}
                   </HStack>
-                  <Text fontSize="sm" color="sage.500" fontWeight="medium">
+                  <Text fontSize="sm" color="sage.600" fontWeight="600">
                     → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
                   </Text>
                 </Box>
