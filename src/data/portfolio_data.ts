@@ -1,7 +1,7 @@
 export const CONFIG = {
   nom: "Romy Chauvière",
   titre: "Étudiante en 3ème année de BUT Informatique",
-  photo: "src/assets/profil.jpg",
+  photo: "/portfolio/assets/profil.jpg",
   email: "romy.chauviere@gmail.com",
   github: "https://github.com/romy514",
   linkedin: "https://linkedin.com/in/romychauviere",
@@ -69,7 +69,7 @@ export const CONFIG = {
       id: "proj1",
       titre: "Développement IHM de montre connectée",
       description: "Conception et implétementation d'un interface utilisateur pour personnes malvoyantes sur une montre connectée (esp32) avec quelques fonctionnalités (recherche d'objet, interaction avec objets connectés).",
-      image: "src/assets/echowatch.png",
+      image: "/portfolio/assets/echowatch.png",
       technos: ["LVGL", "C", "C++", "MQTT"],
       competences: ["comp1", "comp2", "comp5", "comp6"], // IDs des compétences liées
       categorie: "scolaire",
@@ -85,7 +85,7 @@ export const CONFIG = {
       id: "proj2",
       titre: "Site web e-commerce",
       description: "Site web d'e-commerce et base de données avec gestion des produits, commandes, paiements (simulés) et système d'authentification sécurisé.",
-      image: "src/assets/index.png",
+      image: "/portfolio/assets/index.png",
       technos: ["PHP", "HTML/CSS", "JavaScript", "MariaDB"],
       competences: ["comp1", "comp3", "comp4", "comp5", "comp6"],
       categorie: "scolaire",
