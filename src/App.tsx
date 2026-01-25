@@ -218,49 +218,61 @@ const Portfolio = () => {
             Mes Compétences
           </Heading>
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-            {CONFIG.competences.map(comp => (
-              <Box 
-                key={comp.id}
-                border="2px solid"
-                borderColor={comp.color}
-                borderRadius="lg"
-                p={6}
-                _hover={{ boxShadow: 'lg' }}
-                transition="all"
-                cursor="pointer"
-              >
-                <Heading as="h3" size="md" color="gray.600" mb={2}>
-                  {comp.titre}
-                </Heading>
-                <Text fontSize="sm" color="gray.600" mb={3}>
-                  {comp.description}
-                </Text>
-                <HStack mb={4} gap={2}>
-                  <Text fontSize="sm" fontWeight="medium" color="gray.700">
-                    Niveau:
+            {CONFIG.competences.map(comp => {
+              // En BUT3, on affiche seulement les compétences pertinentes
+              if (comp.pertinenteBut3 === false) return null;
+              
+              const niveauBut3 = comp.evolution.but3?.niveau || "Non abordée en BUT3";
+              const colorScheme = 
+                niveauBut3 === 'Maîtrisé' ? 'green' :
+                niveauBut3 === 'Avancé' ? 'sage' :
+                'yellow';
+              
+              return (
+                <Box 
+                  key={comp.id}
+                  border="2px solid"
+                  borderColor={comp.color}
+                  borderRadius="lg"
+                  p={6}
+                  _hover={{ boxShadow: 'lg' }}
+                  transition="all"
+                  cursor="pointer"
+                >
+                  <Heading as="h3" size="md" color="gray.600" mb={2}>
+                    {comp.titre}
+                  </Heading>
+                  <Text fontSize="sm" color="gray.600" mb={3}>
+                    {comp.description}
                   </Text>
-                  <Badge 
-                    colorScheme={
-                      comp.niveau === 'Maîtrisé' ? 'green' :
-                      comp.niveau === 'Avancé' ? 'sage' :
-                      'yellow'
-                    }
-                  >
-                    {comp.niveau}
-                  </Badge>
-                </HStack>
-                <HStack flexWrap="wrap" gap={2} mb={4}>
-                  {comp.technos.map(tech => (
-                    <Badge key={tech} variant="subtle" fontSize="xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                </HStack>
-                <Text fontSize="sm" color="sage.500" fontWeight="medium">
-                  → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
-                </Text>
-              </Box>
-            ))}
+                  <VStack align="start" mb={4} gap={2}>
+                    <HStack gap={2}>
+                      <Text fontSize="sm" fontWeight="medium" color="gray.700">
+                        Niveau BUT3:
+                      </Text>
+                      <Badge colorScheme={colorScheme}>
+                        {niveauBut3}
+                      </Badge>
+                    </HStack>
+                    {comp.evolution.but3?.apprentissages && (
+                      <Text fontSize="sm" color="gray.600" fontStyle="italic">
+                        {comp.evolution.but3.apprentissages}
+                      </Text>
+                    )}
+                  </VStack>
+                  <HStack flexWrap="wrap" gap={2} mb={4}>
+                    {comp.technos.map(tech => (
+                      <Badge key={tech} variant="subtle" fontSize="xs">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </HStack>
+                  <Text fontSize="sm" color="sage.500" fontWeight="medium">
+                    → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
+                  </Text>
+                </Box>
+              );
+            })}
           </SimpleGrid>
         </Container>
       </Box>
