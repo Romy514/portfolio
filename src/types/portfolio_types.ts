@@ -1,12 +1,26 @@
 // Types pour le portfolio
 
+export interface EvolutionNiveau {
+  niveau: string;
+  apprentissages: string;
+  preuves: string[];
+  nouveaute?: boolean;
+}
+
+export interface Evolution {
+  but1: EvolutionNiveau;
+  but2: EvolutionNiveau;
+  but3?: EvolutionNiveau;
+}
+
 export interface Competence {
   id: string;
   titre: string;
-  niveau: 'Maîtrisé' | 'Avancé' | 'Intermédiaire';
   description: string;
-  technos: string[];
   color: string;
+  evolution: Evolution;
+  technos: string[];
+  pertinenteBut3?: boolean;
 }
 
 export interface ContexteProjet {
@@ -23,11 +37,13 @@ export interface Projet {
   image: string;
   technos: string[];
   competences: string[]; // IDs des compétences liées
-  // catégorie du projet — permet de séparer projets scolaires vs professionnels
   categorie?: string;
+  annee?: string; // BUT1, BUT2, BUT3
   contexte: ContexteProjet;
-  lienGithub?: string;
-  lienDemo?: string;
+  apprentissagesClés?: string[];
+  lienGithub?: string | null;
+  lienDemo?: string | null;
+  nouveaute?: string;
 }
 
 export interface Presentation {
@@ -42,6 +58,7 @@ export interface PortfolioConfig {
   email: string;
   github: string;
   linkedin: string;
+  cv?: string;
   presentation: Presentation;
   competences: Competence[];
   projets: Projet[];
