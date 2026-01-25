@@ -77,15 +77,15 @@ const Portfolio = () => {
         />
       </Box>
       <Box flex={{ md: '0 0 60%' }} p={6}>
-        <Heading as="h3" size="lg" color="gray.600" mb={3}>
+        <Heading as="h3" size="lg" color="gray.700" mb={3}>
           {projet.titre}
         </Heading>
         <Text color="gray.700" mb={4}>
           {projet.description}
         </Text>
         
-        <Box color="gray.600" mb={4}>
-          <Heading as="h4" size="sm" color="gray.600" mb={2}>
+        <Box color="gray.700" mb={4}>
+          <Heading as="h4" size="sm" color="gray.700" mb={2}>
             Contexte du projet
           </Heading>
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={3} fontSize="sm">
@@ -105,7 +105,7 @@ const Portfolio = () => {
         </Box>
 
         <Box mb={4}>
-          <Heading as="h4" size="sm" color="gray.600" mb={2}>
+          <Heading as="h4" size="sm" color="gray.700" mb={2}>
             Technologies
           </Heading>
           <HStack flexWrap="wrap" gap={2}>
@@ -118,7 +118,7 @@ const Portfolio = () => {
         </Box>
 
         <Box mb={4}>
-          <Heading as="h4" size="sm" color="gray.600" mb={2}>
+          <Heading as="h4" size="sm" color="gray.700" mb={2}>
             Compétences mobilisées
           </Heading>
           <HStack flexWrap="wrap" color="gray.800" gap={2}>
@@ -169,7 +169,7 @@ const Portfolio = () => {
       />
       
       {/* 🏠 Section Accueil */}
-      <Box as="section" pt={{ base: 24, md: 28 }} pb={16} px={4} color="gray.800" backgroundColor="sage.400">
+      <Box as="section" pt={{ base: 24, md: 28 }} pb={16} px={4} color="gray.800" backgroundColor="sage.700">
         <Container maxW="6xl">
           <Flex direction={{ base: 'column', md: 'row' }} align="center" gap={12}>
             <Box flex={{ md: '0 0 33%' }}>
@@ -195,7 +195,7 @@ const Portfolio = () => {
               <Heading as="h2" size="lg" color="gray.700" textAlign={{ base: 'center', md: 'left' }}>
                 {CONFIG.presentation.accroche}
               </Heading>
-              <Text fontSize="lg" color="gray.600" textAlign={{ base: 'center', md: 'left' }} lineHeight="relaxed">
+              <Text fontSize="lg" color="gray.700" textAlign={{ base: 'center', md: 'left' }} lineHeight="relaxed">
                 {CONFIG.presentation.description}
               </Text>
               <HStack gap={4} justify={{ base: 'center', md: 'start' }}>
@@ -233,7 +233,7 @@ const Portfolio = () => {
       {/* 🎯 Section Compétences */}
       <Box as="section" py={16} px={4} bg="white">
         <Container maxW="6xl">
-          <Heading as="h2" id="competences" size="xl" textAlign="center" color="gray.600" mb={12} scrollMarginTop="24">
+          <Heading as="h2" id="competences" size="xl" textAlign="center" color="gray.700" mb={12} scrollMarginTop="24">
             Mes Compétences
           </Heading>
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={8}>
@@ -366,13 +366,13 @@ const Portfolio = () => {
       {/* 📁 Section Projets */}
       <Box as="section" py={16} px={4} bg="gray.50">
         <Container maxW="6xl">
-          <Heading as="h2" id="projets" size="xl" textAlign="center" color="gray.600" mb={12} scrollMarginTop="24">
+          <Heading as="h2" id="projets" size="xl" textAlign="center" color="gray.700" mb={12} scrollMarginTop="24">
             Mes Projets
           </Heading>
           <VStack gap={8}>
             {projetsProfessionnels.length > 0 && (
               <Box w="full">
-                <Heading as="h3" size="lg" color="gray.600" mb={4}>
+                <Heading as="h3" size="lg" color="gray.700" mb={4}>
                   Expériences professionnelles
                 </Heading>
                 <VStack gap={6}>
@@ -387,7 +387,7 @@ const Portfolio = () => {
 
             {projetsScolaires.length > 0 && (
               <Box w="full">
-                <Heading as="h3" size="lg" color="gray.600" mb={4}>
+                <Heading as="h3" size="lg" color="gray.700" mb={4}>
                   Projets scolaires & personnels
                 </Heading>
                 <VStack gap={6}>
@@ -404,7 +404,7 @@ const Portfolio = () => {
       </Box>
 
       {/* 📧 Section Contact */}
-      <Box as="section" py={16} px={4} bg="gray.50" color="gray.600">
+      <Box as="section" py={16} px={4} bg="gray.50" color="gray.700">
         <Container maxW="3xl">
           <Heading as="h2" id="contact" size="xl" textAlign="center" mb={12} scrollMarginTop="24">
             Me Contacter
@@ -456,7 +456,7 @@ const Portfolio = () => {
                 w="full"
                 colorScheme="sage"
                 size="lg"
-                borderColor={"gray.600"}
+                borderColor={"gray.700"}
               >
                 Envoyer le message
               </Button>
@@ -466,7 +466,7 @@ const Portfolio = () => {
           <Box borderTop="1px" borderColor="gray.200" />
           
           <VStack gap={4} mt={12}>
-            <Text color="gray.600">Ou contactez-moi directement :</Text>
+            <Text color="gray.700">Ou contactez-moi directement :</Text>
             <HStack gap={6} justify="center" flexWrap="wrap">
               <Link href={`mailto:${CONFIG.email}`} color="sage.500">
                 {CONFIG.email}
