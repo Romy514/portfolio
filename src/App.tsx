@@ -202,6 +202,13 @@ const Portfolio = () => {
                     <FaEnvelope size={24} />
                   </Button>
                 </a>
+                {CONFIG.cv && (
+                  <a href={CONFIG.cv} target="_blank" rel="noopener noreferrer">
+                    <Button colorScheme="blue" size="md">
+                      📄 Télécharger mon CV
+                    </Button>
+                  </a>
+                )}
               </HStack>
             </VStack>
           </Flex>
@@ -217,62 +224,88 @@ const Portfolio = () => {
           <Heading as="h2" id="competences" size="xl" textAlign="center" color="gray.600" mb={12} scrollMarginTop="24">
             Mes Compétences
           </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={6}>
-            {CONFIG.competences.map(comp => {
-              // En BUT3, on affiche seulement les compétences pertinentes
-              if (comp.pertinenteBut3 === false) return null;
-              
-              const niveauBut3 = comp.evolution.but3?.niveau || "Non abordée en BUT3";
-              const colorScheme = 
-                niveauBut3 === 'Maîtrisé' ? 'green' :
-                niveauBut3 === 'Avancé' ? 'sage' :
-                'yellow';
-              
-              return (
-                <Box 
-                  key={comp.id}
-                  border="2px solid"
-                  borderColor={comp.color}
-                  borderRadius="lg"
-                  p={6}
-                  _hover={{ boxShadow: 'lg' }}
-                  transition="all"
-                  cursor="pointer"
-                >
-                  <Heading as="h3" size="md" color="gray.600" mb={2}>
-                    {comp.titre}
-                  </Heading>
-                  <Text fontSize="sm" color="gray.600" mb={3}>
-                    {comp.description}
-                  </Text>
-                  <VStack align="start" mb={4} gap={2}>
-                    <HStack gap={2}>
-                      <Text fontSize="sm" fontWeight="medium" color="gray.700">
-                        Niveau BUT3:
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={8}>
+            {CONFIG.competences.map(comp => (
+              <Box 
+                key={comp.id}
+                border="2px solid"
+                borderColor={comp.color}
+                borderRadius="lg"
+                p={6}
+                _hover={{ boxShadow: 'lg' }}
+                transition="all"
+              >
+                <Heading as="h3" size="md" color="gray.600" mb={4}>
+                  {comp.titre}
+                </Heading>
+                <Text fontSize="sm" color="gray.600" mb={6}>
+                  {comp.description}
+                </Text>
+
+                {/* Evolution des compétences */}
+                <VStack align="stretch" gap={4} mb={6}>
+                  {/* BUT1 */}
+                  <Box borderLeft="4px solid" borderLeftColor="blue.300" pl={4}>
+                    <HStack gap={2} mb={2}>
+                      <Badge colorScheme="blue" fontSize="xs">BUT1</Badge>
+                      <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                        {comp.evolution.but1.niveau}
                       </Text>
-                      <Badge colorScheme={colorScheme}>
-                        {niveauBut3}
-                      </Badge>
                     </HStack>
-                    {comp.evolution.but3?.apprentissages && (
-                      <Text fontSize="sm" color="gray.600" fontStyle="italic">
-                        {comp.evolution.but3.apprentissages}
+                    <Text fontSize="xs" color="gray.600">
+                      {comp.evolution.but1.apprentissages}
+                    </Text>
+                  </Box>
+
+                  {/* Arrow down */}
+                  <Text textAlign="center" color="gray.400" fontSize="lg">↓</Text>
+
+                  {/* BUT2 */}
+                  <Box borderLeft="4px solid" borderLeftColor="amber.300" pl={4}>
+                    <HStack gap={2} mb={2}>
+                      <Badge colorScheme="orange" fontSize="xs">BUT2</Badge>
+                      <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                        {comp.evolution.but2.niveau}
                       </Text>
-                    )}
-                  </VStack>
-                  <HStack flexWrap="wrap" gap={2} mb={4}>
-                    {comp.technos.map(tech => (
-                      <Badge key={tech} variant="subtle" fontSize="xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </HStack>
-                  <Text fontSize="sm" color="sage.500" fontWeight="medium">
-                    → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
-                  </Text>
-                </Box>
-              );
-            })}
+                    </HStack>
+                    <Text fontSize="xs" color="gray.600">
+                      {comp.evolution.but2.apprentissages}
+                    </Text>
+                  </Box>
+
+                  {/* Arrow down */}
+                  {comp.evolution.but3 && (
+                    <>
+                      <Text textAlign="center" color="gray.400" fontSize="lg">↓</Text>
+
+                      {/* BUT3 */}
+                      <Box borderLeft="4px solid" borderLeftColor="green.300" pl={4}>
+                        <HStack gap={2} mb={2}>
+                          <Badge colorScheme="green" fontSize="xs">BUT3</Badge>
+                          <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                            {comp.evolution.but3.niveau}
+                          </Text>
+                        </HStack>
+                        <Text fontSize="xs" color="gray.600">
+                          {comp.evolution.but3.apprentissages}
+                        </Text>
+                      </Box>
+                    </>
+                  )}
+                </VStack>
+
+                <HStack flexWrap="wrap" gap={2} mb={4}>
+                  {comp.technos.map(tech => (
+                    <Badge key={tech} variant="subtle" fontSize="xs">
+                      {tech}
+                    </Badge>
+                  ))}
+                </HStack>
+                <Text fontSize="sm" color="sage.500" fontWeight="medium">
+                  → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
+                </Text>
+              </Box>
+            ))}
           </SimpleGrid>
         </Container>
       </Box>
@@ -318,52 +351,64 @@ const Portfolio = () => {
       </Box>
 
       {/* 📧 Section Contact */}
-      <Box as="section" py={16} px={4} bg="white" color="gray.600">
+      <Box as="section" py={16} px={4} bg="gray.50" color="gray.600">
         <Container maxW="3xl">
           <Heading as="h2" id="contact" size="xl" textAlign="center" mb={12} scrollMarginTop="24">
             Me Contacter
           </Heading>
-          <VStack gap={6} mb={12}>
-            <Box w="full">
-              <Text mb={2} fontWeight="medium">Nom complet</Text>
-              <Input 
-                type="text"
-                name="nom"
-                value={formData.nom}
-                onChange={handleInputChange}
-                placeholder="Votre nom"
-              />
-            </Box>
-            <Box w="full">
-              <Text mb={2} fontWeight="medium">Email</Text>
-              <Input 
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                placeholder="votre.email@exemple.fr"
-              />
-            </Box>
-            <Box w="full">
-              <Text mb={2} fontWeight="medium">Message</Text>
-              <Textarea 
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                rows={6}
-                placeholder="Votre message..."
-              />
-            </Box>
-            <Button 
-              onClick={handleSubmit}
-              w="full"
-              colorScheme="sage"
-              size="lg"
-              borderColor={"gray.600"}
-            >
-              Envoyer le message
-            </Button>
-          </VStack>
+          
+          {/* Carte du formulaire */}
+          <Box 
+            bg="white" 
+            borderRadius="lg" 
+            boxShadow="md" 
+            p={8}
+            border="1px solid"
+            borderColor="gray.200"
+            mb={8}
+          >
+            <VStack gap={6}>
+              <Box w="full">
+                <Text mb={2} fontWeight="medium">Nom complet</Text>
+                <Input 
+                  type="text"
+                  name="nom"
+                  value={formData.nom}
+                  onChange={handleInputChange}
+                  placeholder="Votre nom"
+                />
+              </Box>
+              <Box w="full">
+                <Text mb={2} fontWeight="medium">Email</Text>
+                <Input 
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="votre.email@exemple.fr"
+                />
+              </Box>
+              <Box w="full">
+                <Text mb={2} fontWeight="medium">Message</Text>
+                <Textarea 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  rows={6}
+                  placeholder="Votre message..."
+                />
+              </Box>
+              <Button 
+                onClick={handleSubmit}
+                w="full"
+                colorScheme="sage"
+                size="lg"
+                borderColor={"gray.600"}
+              >
+                Envoyer le message
+              </Button>
+            </VStack>
+          </Box>
           
           <Box borderTop="1px" borderColor="gray.200" />
           
