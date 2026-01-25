@@ -9,6 +9,7 @@ import MenuPortfolio from '@/components/menu.tsx';
 const Portfolio = () => {
 
   const [activeSection, setActiveSection] = useState('accueil');
+  const [expandedComp, setExpandedComp] = useState<string | null>(null);
   
   // États pour le formulaire
   const [formData, setFormData] = useState({
@@ -225,87 +226,120 @@ const Portfolio = () => {
             Mes Compétences
           </Heading>
           <SimpleGrid columns={{ base: 1, md: 2 }} gap={8}>
-            {CONFIG.competences.map(comp => (
-              <Box 
-                key={comp.id}
-                border="2px solid"
-                borderColor={comp.color}
-                borderRadius="lg"
-                p={6}
-                _hover={{ boxShadow: 'lg' }}
-                transition="all"
-              >
-                <Heading as="h3" size="md" color="gray.600" mb={4}>
-                  {comp.titre}
-                </Heading>
-                <Text fontSize="sm" color="gray.600" mb={6}>
-                  {comp.description}
-                </Text>
+            {CONFIG.competences.map(comp => {
+              // Déterminer le dernier niveau disponible
+              const niveauFinal = comp.evolution.but3 || comp.evolution.but2;
+              const levelBut = comp.evolution.but3 ? 'but3' : 'but2';
+              const isExpanded = expandedComp === comp.id;
+              
+              return (
+                <Box 
+                  key={comp.id}
+                  border="2px solid"
+                  borderColor={comp.color}
+                  borderRadius="lg"
+                  p={6}
+                  _hover={{ boxShadow: 'lg' }}
+                  transition="all"
+                >
+                  <Heading as="h3" size="md" color="gray.600" mb={4}>
+                    {comp.titre}
+                  </Heading>
+                  <Text fontSize="sm" color="gray.600" mb={6}>
+                    {comp.description}
+                  </Text>
 
-                {/* Evolution des compétences */}
-                <VStack align="stretch" gap={4} mb={6}>
-                  {/* BUT1 */}
-                  <Box borderLeft="4px solid" borderLeftColor="blue.300" pl={4}>
-                    <HStack gap={2} mb={2}>
-                      <Badge colorScheme="blue" fontSize="xs">BUT1</Badge>
-                      <Text fontSize="sm" fontWeight="semibold" color="gray.700">
-                        {comp.evolution.but1.niveau}
-                      </Text>
-                    </HStack>
-                    <Text fontSize="xs" color="gray.600">
-                      {comp.evolution.but1.apprentissages}
-                    </Text>
-                  </Box>
-
-                  {/* Arrow down */}
-                  <Text textAlign="center" color="gray.400" fontSize="lg">↓</Text>
-
-                  {/* BUT2 */}
-                  <Box borderLeft="4px solid" borderLeftColor="amber.300" pl={4}>
-                    <HStack gap={2} mb={2}>
-                      <Badge colorScheme="orange" fontSize="xs">BUT2</Badge>
-                      <Text fontSize="sm" fontWeight="semibold" color="gray.700">
-                        {comp.evolution.but2.niveau}
-                      </Text>
-                    </HStack>
-                    <Text fontSize="xs" color="gray.600">
-                      {comp.evolution.but2.apprentissages}
-                    </Text>
-                  </Box>
-
-                  {/* Arrow down */}
-                  {comp.evolution.but3 && (
-                    <>
-                      <Text textAlign="center" color="gray.400" fontSize="lg">↓</Text>
-
-                      {/* BUT3 */}
-                      <Box borderLeft="4px solid" borderLeftColor="green.300" pl={4}>
-                        <HStack gap={2} mb={2}>
-                          <Badge colorScheme="green" fontSize="xs">BUT3</Badge>
-                          <Text fontSize="sm" fontWeight="semibold" color="gray.700">
-                            {comp.evolution.but3.niveau}
-                          </Text>
-                        </HStack>
-                        <Text fontSize="xs" color="gray.600">
-                          {comp.evolution.but3.apprentissages}
+                  {/* Affichage du dernier niveau (replié par défaut) */}
+                  <VStack align="stretch" gap={4} mb={6}>
+                    <Box borderLeft="4px solid" borderLeftColor="green.300" pl={4}>
+                      <HStack gap={2} mb={2}>
+                        <Badge colorScheme="green" fontSize="xs">
+                          {levelBut === 'but3' ? 'BUT3 (Actuel)' : 'BUT2 (Actuel)'}
+                        </Badge>
+                        <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                          {niveauFinal.niveau}
                         </Text>
-                      </Box>
-                    </>
-                  )}
-                </VStack>
+                      </HStack>
+                      <Text fontSize="xs" color="gray.600">
+                        {niveauFinal.apprentissages}
+                      </Text>
+                    </Box>
 
-                <HStack flexWrap="wrap" gap={2} mb={4}>
-                  {comp.technos.map(tech => (
-                    <Badge key={tech} variant="subtle" fontSize="xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                </HStack>
-                <Text fontSize="sm" color="sage.500" fontWeight="medium">
-                  → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
-                </Text>
-              </Box>
-            ))}
+                    {/* Section dépliable - Evolution complète */}
+                    {isExpanded && (
+                      <>
+                        <Text textAlign="center" color="gray.400" fontSize="lg">↑</Text>
+
+                        {/* BUT2 (si on est en BUT3) */}
+                        {comp.evolution.but3 && (
+                          <Box borderLeft="4px solid" borderLeftColor="amber.300" pl={4}>
+                            <HStack gap={2} mb={2}>
+                              <Badge colorScheme="orange" fontSize="xs">BUT2</Badge>
+                              <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                                {comp.evolution.but2.niveau}
+                              </Text>
+                            </HStack>
+                            <Text fontSize="xs" color="gray.600">
+                              {comp.evolution.but2.apprentissages}
+                            </Text>
+                          </Box>
+                        )}
+
+                        <Text textAlign="center" color="gray.400" fontSize="lg">↑</Text>
+
+                        {/* BUT1 */}
+                        <Box borderLeft="4px solid" borderLeftColor="blue.300" pl={4}>
+                          <HStack gap={2} mb={2}>
+                            <Badge colorScheme="blue" fontSize="xs">BUT1</Badge>
+                            <Text fontSize="sm" fontWeight="semibold" color="gray.700">
+                              {comp.evolution.but1.niveau}
+                            </Text>
+                          </HStack>
+                          <Text fontSize="xs" color="gray.600">
+                            {comp.evolution.but1.apprentissages}
+                          </Text>
+                        </Box>
+                      </>
+                    )}
+                  </VStack>
+
+                  {/* Bouton pour déployer */}
+                  <Button
+                    onClick={() => setExpandedComp(isExpanded ? null : comp.id)}
+                    variant="ghost"
+                    size="sm"
+                    w="full"
+                    mb={4}
+                    color="sage.600"
+                    _hover={{ bg: 'sage.50' }}
+                    display="flex"
+                    justifyContent="center"
+                    gap={2}
+                  >
+                    <Text>
+                      {isExpanded ? 'Masquer l\'évolution' : 'Voir l\'évolution complète'}
+                    </Text>
+                    <Box
+                      as={MdKeyboardArrowDown}
+                      transform={isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'}
+                      transition="transform 0.3s"
+                      fontSize="xl"
+                    />
+                  </Button>
+
+                  <HStack flexWrap="wrap" gap={2} mb={4}>
+                    {comp.technos.map(tech => (
+                      <Badge key={tech} variant="subtle" fontSize="xs">
+                        {tech}
+                      </Badge>
+                    ))}
+                  </HStack>
+                  <Text fontSize="sm" color="sage.500" fontWeight="medium">
+                    → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
+                  </Text>
+                </Box>
+              );
+            })}
           </SimpleGrid>
         </Container>
       </Box>
