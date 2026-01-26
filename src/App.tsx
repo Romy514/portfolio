@@ -210,7 +210,7 @@ const Portfolio = () => {
                   </Button>
                 </a>
                 <a href={`mailto:${CONFIG.email}`}>
-                  <Button p={3} bg="green.600" color="white" borderRadius="full" _hover={{ bg: 'green.700' }}>
+                  <Button p={3} bg="green.600" color="white" borderRadius="full" _hover={{ bg: 'green.500' }}>
                     <FaEnvelope size={24} />
                   </Button>
                 </a>
@@ -353,7 +353,7 @@ const Portfolio = () => {
                       </Badge>
                     ))}
                   </HStack>
-                  <Text fontSize="sm" color="sage.600" fontWeight="600">
+                  <Text fontSize="sm" color="grey.600" fontWeight="600">
                     → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
                   </Text>
                 </Box>
