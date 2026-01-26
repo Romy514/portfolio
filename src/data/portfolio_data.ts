@@ -32,7 +32,7 @@ export const CONFIG = {
         },
         but3: {
           niveau: "Maîtrisé",
-          apprentissages: "Expertise en React, TypeScript, composants réutilisables. Capacité à produire du code maintenable et documenté.",
+          apprentissages: "Expertise en Python, composants réutilisables. Capacité à produire du code maintenable et documenté.",
           preuves: ["proj3"],
           nouveaute: false
         }
@@ -161,7 +161,7 @@ export const CONFIG = {
       technos: ["LVGL", "C", "C++", "MQTT"],
       competences: ["comp1", "comp2", "comp5", "comp6"],
       categorie: "scolaire",
-      annee: "BUT2",
+      annee: "BUT3",
       contexte: {
         client: "Adrien van den Bossche - l'IRIT pour Locura4IoT",
         besoin: "Créer une IHM accessible pour une montre connectée destinée aux malvoyants",
@@ -223,6 +223,30 @@ export const CONFIG = {
       ],
       lienGithub: null,
       nouveaute: "Compétence développée en environnement professionnel"
-    }
+    },
+    {
+      id: "proj4",
+      titre: "Développement d'un jeu Bomberman",
+      description: "Conception et développement d'un jeu Godot en équipe",
+      image: "/portfolio/assets/echowatch.png",
+      technos: ["GScript", "Godot"],
+      competences: ["comp1", "comp2", "comp6"],
+      categorie: "scolaire",
+      annee: "BUT3",
+      contexte: {
+        client: "Projet en développement multimédia",
+        besoin: "Créer une copie 3D du jeu rétro Bomberman",
+        solution: "Jeu vidéo complet en 3D jouable en multijoueur local ",
+        resultat: "Jeu déployé et jouable sur Itch.io"
+      },
+      apprentissagesClés: [
+        "Apprentissage de l'utilisation de Godot Editor et GScript",
+        "Introduction aux concepts clés du développement de jeu vidéo (3D, physique)",
+        "Gestion de projet, Kanban, travail d'équipe"
+      ],
+      lienGithub: "https://github.com/Romy514/bomberman",
+      demo: "https://romyy514.itch.io/bomberman",
+    },
+    
   ]
 };
