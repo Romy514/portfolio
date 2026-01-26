@@ -169,7 +169,7 @@ const Portfolio = () => {
       />
       
       {/* 🏠 Section Accueil */}
-      <Box as="section" pt={{ base: 24, md: 28 }} pb={16} px={4} color="gray.800" backgroundColor="sage.700">
+      <Box as="section" pt={{ base: 24, md: 28 }} pb={16} px={4} color="gray.800" backgroundColor="sage.200">
         <Container maxW="6xl">
           <Flex direction={{ base: 'column', md: 'row' }} align="center" gap={12}>
             <Box flex={{ md: '0 0 33%' }}>
