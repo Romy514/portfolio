@@ -234,7 +234,7 @@ export const CONFIG = {
       id: "proj4",
       titre: "Développement d'un jeu Bomberman",
       description: "Conception et développement d'un jeu Godot en équipe",
-      image: "/portfolio/assets/bombermanfixing thin.png",
+      image: "/portfolio/assets/bomberman.png",
       technos: ["GScript", "Godot"],
       competences: ["comp1", "comp2", "comp6"],
       categorie: "scolaire",
