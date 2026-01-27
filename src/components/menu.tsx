@@ -13,6 +13,7 @@ const MenuPortfolio = ({ activeSection = 'accueil', scrollToSection }: MenuPortf
   const sections = [
     { id: 'accueil', label: 'Accueil' },
     { id: 'competences', label: 'Compétences' },
+    { id: 'technologies', label: 'Technologies' },
     { id: 'projets', label: 'Projets' },
     { id: 'contact', label: 'Contact' }
   ];

@@ -5,11 +5,13 @@ import type { Competence, Projet } from './types/portfolio_types';
 import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import MenuPortfolio from '@/components/menu.tsx';
+import TechnologiesCarousel from '@/components/ui/technologies-carousel.tsx';
 
 const Portfolio = () => {
 
   const [activeSection, setActiveSection] = useState('accueil');
   const [expandedComps, setExpandedComps] = useState<Set<string>>(new Set());
+  const [selectedCompetence, setSelectedCompetence] = useState<Competence['id'] | null>(null);
   
   // États pour le formulaire
   const [formData, setFormData] = useState({
@@ -44,6 +46,11 @@ const Portfolio = () => {
     document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleSelectCompetence = (compId: Competence['id'] | null) => {
+    setSelectedCompetence(compId);
+    scrollToSection('projets');
+  };
+
   // Gestion du formulaire
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -62,8 +69,11 @@ const Portfolio = () => {
   };
 
   // Regroupement des projets par catégorie
-  const projetsProfessionnels = CONFIG.projets.filter(p => p.categorie === 'professionnel');
-  const projetsScolaires = CONFIG.projets.filter(p => p.categorie === 'scolaire' || p.categorie === 'personnel' || !p.categorie);
+  const filteredProjets = selectedCompetence
+    ? CONFIG.projets.filter(p => p.competences.includes(selectedCompetence))
+    : CONFIG.projets;
+  const projetsProfessionnels = filteredProjets.filter(p => p.categorie === 'professionnel');
+  const projetsScolaires = filteredProjets.filter(p => p.categorie === 'scolaire' || p.categorie === 'personnel' || !p.categorie);
 
   const renderProjectInner = (projet: Projet) => (
     <Flex direction={{ base: 'column', md: 'row' }}>
@@ -160,6 +170,10 @@ const Portfolio = () => {
       </Box>
     </Flex>
   );
+
+  const allTechnologies = Array.from(new Set(
+    CONFIG.competences.flatMap(c => c.technos)
+  ));
 
   return (
     <>
@@ -353,13 +367,28 @@ const Portfolio = () => {
                       </Badge>
                     ))}
                   </HStack>
-                  <Text fontSize="sm" color="grey.600" fontWeight="600">
+                  <Button
+                    variant="ghost"
+                    color="sage.700"
+                    size="sm"
+                    onClick={() => handleSelectCompetence(comp.id)}
+                  >
                     → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
-                  </Text>
+                  </Button>
                 </Box>
               );
             })}
           </SimpleGrid>
+        </Container>
+      </Box>
+
+      {/* 🧰 Section Technologies */}
+      <Box as="section" py={16} px={4} bg="gray.50">
+        <Container maxW="6xl">
+          <Heading as="h2" id="technologies" size="xl" textAlign="center" color="gray.700" mb={12} scrollMarginTop="24">
+            Technologies connues
+          </Heading>
+          <TechnologiesCarousel items={allTechnologies} />
         </Container>
       </Box>
 
@@ -369,6 +398,37 @@ const Portfolio = () => {
           <Heading as="h2" id="projets" size="xl" textAlign="center" color="gray.700" mb={12} scrollMarginTop="24">
             Mes Projets
           </Heading>
+          <VStack gap={4} mb={8}>
+            <HStack gap={2} justify="center" flexWrap="wrap">
+              <Button
+                size="sm"
+                variant={selectedCompetence === null ? 'solid' : 'outline'}
+                colorScheme="sage"
+                onClick={() => handleSelectCompetence(null)}
+              >
+                Toutes les compétences
+              </Button>
+              {CONFIG.competences.map(c => (
+                <Button
+                  key={c.id}
+                  size="sm"
+                  variant={selectedCompetence === c.id ? 'solid' : 'outline'}
+                  colorScheme="sage"
+                  onClick={() => setSelectedCompetence(c.id)}
+                  title={c.titre}
+                >
+                  {c.titre.length > 24 ? `${c.titre.substring(0, 24)}…` : c.titre}
+                </Button>
+              ))}
+            </HStack>
+            {selectedCompetence && (
+              <Text fontSize="sm" color="gray.600">
+                Filtre actif: {CONFIG.competences.find(c => c.id === selectedCompetence)?.titre}
+                {' '}
+                <Button variant="ghost" color="sage.700" size="sm" onClick={() => setSelectedCompetence(null)}>Effacer</Button>
+              </Text>
+            )}
+          </VStack>
           <VStack gap={8}>
             {projetsProfessionnels.length > 0 && (
               <Box w="full">
