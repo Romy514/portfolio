@@ -170,12 +170,10 @@ const Portfolio = () => {
                 }}
                 size="sm"
                 variant="outline"
+                color="gray.700"
                 title={comp.titre}
               >
-                {comp.titre.length > 35 
-                  ? `${comp.titre.substring(0, 35)}...` 
-                  : comp.titre
-                }
+                {comp.titreCourt}
               </Button>
             ))}
           </HStack>
@@ -541,7 +539,11 @@ const Portfolio = () => {
               <Button
                 size="sm"
                 variant={selectedCompetence === null ? 'solid' : 'outline'}
-                colorScheme="sage"
+                bg={selectedCompetence === null ? 'sage.600' : 'transparent'}
+                borderColor="sage.200"
+                borderWidth={selectedCompetence === null ? '0px' : '1px'}
+                color={selectedCompetence === null ? 'white' : 'sage.700'}
+                _hover={{ bg: selectedCompetence === null ? 'sage.700' : 'sage.50' }}
                 onClick={() => handleSelectCompetence(null)}
                 borderRadius="full"
                 fontWeight="600"
@@ -553,13 +555,17 @@ const Portfolio = () => {
                   key={c.id}
                   size="sm"
                   variant={selectedCompetence === c.id ? 'solid' : 'outline'}
-                  colorScheme="sage"
+                  bg={selectedCompetence === c.id ? 'sage.600' : 'transparent'}
+                  borderColor="sage.200"
+                  borderWidth={selectedCompetence === c.id ? '0px' : '1px'}
+                  color={selectedCompetence === c.id ? 'white' : 'sage.700'}
+                  _hover={{ bg: selectedCompetence === c.id ? 'sage.700' : 'sage.50' }}
                   onClick={() => setSelectedCompetence(c.id)}
                   title={c.titre}
                   borderRadius="full"
                   fontWeight="600"
                 >
-                  {c.titre.length > 24 ? `${c.titre.substring(0, 24)}…` : c.titre}
+                  {c.titreCourt}
                 </Button>
               ))}
             </HStack>
@@ -574,6 +580,7 @@ const Portfolio = () => {
                   {projetsProfessionnels.map(projet => (
                     <Box 
                       key={projet.id} 
+                      w="full"
                       bg="white" 
                       borderRadius="xl" 
                       overflow="hidden" 
@@ -598,6 +605,7 @@ const Portfolio = () => {
                 <VStack gap={6}>
                   {projetsScolaires.map(projet => (
                     <Box 
+                      w="full"
                       key={projet.id} 
                       bg="white" 
                       borderRadius="xl" 

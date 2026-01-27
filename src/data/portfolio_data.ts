@@ -17,6 +17,7 @@ export const CONFIG = {
     {
       id: "comp1",
       titre: "Réaliser un développement d'application",
+      titreCourt: "Réaliser",
       description: "Conception et développement d'applications web et logicielles",
       color: "blue.500",
       evolution: {
@@ -41,6 +42,7 @@ export const CONFIG = {
     },
     {
       id: "comp2",
+      titreCourt: "Optimiser",
       titre: "Optimiser des applications informatiques",
       description: "Performance, qualité du code et bonnes pratiques",
       color: "green.500",
@@ -65,6 +67,7 @@ export const CONFIG = {
       technos: ["Git", "GitHub", "Docker", "CI/CD", "Code Review", "Tests"]
     },
     {
+      titreCourt: "Administrer",
       id: "comp3",
       titre: "Administrer des systèmes informatiques communicants",
       description: "Gestion de serveurs et infrastructures",
@@ -87,6 +90,7 @@ export const CONFIG = {
     {
       id: "comp4",
       titre: "Gérer des données de l'information",
+      titreCourt: "Gérer des données",
       description: "Modélisation, requêtes et optimisation de bases de données",
       color: "orange.500",
       evolution: {
@@ -107,6 +111,7 @@ export const CONFIG = {
     {
       id: "comp5",
       titre: "Conduire un projet",
+      titreCourt: "Conduire",
       description: "Méthodes agiles, travail en équipe et gestion de projet",
       color: "red.500",
       evolution: {
@@ -127,6 +132,7 @@ export const CONFIG = {
     {
       id: "comp6",
       titre: "Travailler dans une équipe informatique",
+      titreCourt: "Collaborer",
       description: "Collaboration, communication et veille technologique",
       color: "purple.500",
       evolution: {
@@ -228,7 +234,7 @@ export const CONFIG = {
       id: "proj4",
       titre: "Développement d'un jeu Bomberman",
       description: "Conception et développement d'un jeu Godot en équipe",
-      image: "/portfolio/assets/echowatch.png",
+      image: "/portfolio/assets/bomberman.png",
       technos: ["GScript", "Godot"],
       competences: ["comp1", "comp2", "comp6"],
       categorie: "scolaire",

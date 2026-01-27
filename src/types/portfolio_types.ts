@@ -21,6 +21,7 @@ export interface Technology {
 export interface Competence {
   id: string;
   titre: string;
+  titreCourt: string;
   description: string;
   color: string;
   evolution: Evolution;
