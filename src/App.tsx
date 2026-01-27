@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Box, Container, SimpleGrid, VStack, HStack, Text, Heading, Image, Button, Input, Textarea, Badge, Flex, Link, DialogRoot, DialogContent, DialogHeader, DialogBody, DialogFooter, DialogCloseTrigger, DialogBackdrop, DialogPositioner } from '@chakra-ui/react'
 import { CONFIG } from '@/data/portfolio_data.ts'
-import type { Competence, Projet } from './types/portfolio_types';
+import type { Competence, Projet, Technology } from './types/portfolio_types';
 import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import MenuPortfolio from '@/components/menu.tsx';
@@ -201,10 +201,6 @@ const Portfolio = () => {
     </Flex>
   );
 
-  const allTechnologies = Array.from(new Set(
-    CONFIG.competences.flatMap(c => c.technos)
-  ));
-
   return (
     <>
       <MenuPortfolio 
@@ -218,7 +214,7 @@ const Portfolio = () => {
         pt={{ base: 28, md: 32 }} 
         pb={20} 
         px={4} 
-        bgGradient="linear(to-br, sage.50, white, primary.50)"
+        bgGradient="linear(to-br, white, sage.50, white)"
         position="relative"
         overflow="hidden"
       >
@@ -350,7 +346,7 @@ const Portfolio = () => {
             </VStack>
           </Flex>
           <Flex justify="center" mt={16}>
-            <Box as={MdKeyboardArrowDown} fontSize="5xl" color="sage.400" animation="bounce 2s infinite" />
+            <Box as={MdKeyboardArrowDown} fontSize="5xl" color="sage.600" animation="bounce 2s infinite" />
           </Flex>
         </Container>
       </Box>
@@ -516,7 +512,7 @@ const Portfolio = () => {
               Un aperçu des langages, frameworks et outils que j'utilise au quotidien
             </Text>
           </VStack>
-          <TechnologiesCarousel items={allTechnologies} />
+          <TechnologiesCarousel items={CONFIG.technologies} />
         </Container>
       </Box>
 
@@ -821,7 +817,7 @@ const Portfolio = () => {
 
                   {/* Flèche si 3 niveaux */}
                   {selectedCompetenceModal.evolution.but3 && (
-                    <Text textAlign="center" color="accent.400" fontSize="2xl" fontWeight="bold">↑</Text>
+                    <Text textAlign="center" color="gray.400" fontSize="2xl" fontWeight="bold">↑</Text>
                   )}
 
                   {/* BUT2 */}
@@ -840,7 +836,7 @@ const Portfolio = () => {
                   </Box>
 
                   {/* Flèche toujours présente entre BUT2 et BUT1 */}
-                  <Text textAlign="center" color="accent.400" fontSize="2xl" fontWeight="bold">↑</Text>
+                  <Text textAlign="center" color="gray.400" fontSize="2xl" fontWeight="bold">↑</Text>
 
                   {/* BUT1 */}
                   <Box borderLeft="4px solid" borderLeftColor="primary.300" pl={4} py={4} bg="primary.100" borderRadius="md">

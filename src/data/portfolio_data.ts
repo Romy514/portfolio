@@ -248,5 +248,20 @@ export const CONFIG = {
       demo: "https://romyy514.itch.io/bomberman",
     },
     
+  ],
+
+  // 🛠 Technologies - Liste épurée pour affichage
+  technologies: [
+      { name: "Python", icon: "FaPython" },
+      { name: "Symfony", icon: "SiSymfony" },
+      { name: "Java", icon: "FaJava" },
+      { name: "Bash", icon: "SiGnubash" },
+      { name: "Docker", icon: "FaDocker" },
+      { name: "Git", icon: "FaGitAlt" },
+      { name: "Node.js", icon: "FaNodeJs" },
+      { name: "Agile/Scrum", icon: "FaUsers" },
+      { name: "SQL", icon: "FaDatabase" },
+      { name: "Figma", icon: "FaFigma" }
   ]
 };
+

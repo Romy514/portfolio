@@ -13,6 +13,11 @@ export interface Evolution {
   but3?: EvolutionNiveau;
 }
 
+export interface Technology {
+  name: string;
+  icon: string;
+}
+
 export interface Competence {
   id: string;
   titre: string;

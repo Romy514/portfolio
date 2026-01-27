@@ -1,49 +1,49 @@
-import { Box, Heading, HStack, Badge } from '@chakra-ui/react'
+import { Box, SimpleGrid, VStack, Text, Icon } from '@chakra-ui/react'
+import type { Technology } from '@/types/portfolio_types';
+import * as FaIcons from 'react-icons/fa'
+import * as SiIcons from 'react-icons/si'
 
 interface TechnologiesCarouselProps {
-  items: string[]
-  title?: string
+  items: Technology[]
 }
 
-const TechnologiesCarousel = ({ items, title = 'Technologies connues' }: TechnologiesCarouselProps) => {
+const TechnologiesCarousel = ({ items }: TechnologiesCarouselProps) => {
+  // Helper to dynamically get icon component
+  const getIcon = (iconName: string) => {
+    // @ts-ignore
+    const IconComponent = FaIcons[iconName] || SiIcons[iconName];
+    return IconComponent ? <IconComponent size={32} /> : null;
+  };
+
   return (
-    <Box 
-      bg="white" 
-      borderRadius="xl" 
-      boxShadow="md" 
-      p={6} 
-      border="1px solid" 
-      borderColor="gray.200"
-    >
-      <Heading as="h3" size="md" color="gray.900" mb={6} fontWeight="700">{title}</Heading>
-      <HStack gap={3} flexWrap="wrap" justify="center">
-        {items.map((tech) => (
-          <Badge 
-            key={tech} 
-            variant="subtle" 
-            fontSize="sm" 
-            bg="sage.50" 
-            color="sage.800" 
-            px={4} 
-            py={2} 
-            borderRadius="full"
-            fontWeight="600"
-            border="1px solid"
-            borderColor="sage.200"
-            _hover={{ 
-              bg: 'sage.100', 
-              transform: 'translateY(-2px)',
-              boxShadow: 'sm'
-            }}
-            transition="all 0.2s"
-            cursor="default"
-          >
-            {tech}
-          </Badge>
-        ))}
-      </HStack>
-    </Box>
+    <SimpleGrid columns={{ base: 2, sm: 3, md: 5 }} gap={8}>
+      {items.map((tech) => (
+        <VStack 
+          key={tech.name}
+          bg="white" 
+          p={6} 
+          borderRadius="xl" 
+          boxShadow="sm"
+          border="1px solid"
+          borderColor="gray.100"
+          transition="all 0.2s"
+          _hover={{ 
+            transform: 'translateY(-4px)',
+            boxShadow: 'md',
+            borderColor: 'primary.200'
+          }}
+        >
+          <Box color="primary.500" mb={2}>
+            {getIcon(tech.icon)}
+          </Box>
+          <Text fontWeight="600" color="gray.700" fontSize="sm">
+            {tech.name}
+          </Text>
+        </VStack>
+      ))}
+    </SimpleGrid>
   )
 }
 
-export default TechnologiesCarousel
+export default TechnologiesCarousel;
+
