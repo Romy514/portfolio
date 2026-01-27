@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Box, Container, SimpleGrid, VStack, HStack, Text, Heading, Image, Button, Input, Textarea, Badge, Flex, Link } from '@chakra-ui/react'
 import { CONFIG } from '@/data/portfolio_data.ts'
 import type { Competence, Projet } from './types/portfolio_types';
@@ -12,6 +12,36 @@ const Portfolio = () => {
   const [activeSection, setActiveSection] = useState('accueil');
   const [expandedComps, setExpandedComps] = useState<Set<string>>(new Set());
   const [selectedCompetence, setSelectedCompetence] = useState<Competence['id'] | null>(null);
+
+  // Observer pour détecter la section visible lors du scroll
+  useEffect(() => {
+    const sections = ['accueil', 'competences', 'technologies', 'projets', 'contact'];
+    const observers = sections.map(sectionId => {
+      const element = document.getElementById(sectionId);
+      if (!element) return null;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              setActiveSection(sectionId);
+            }
+          });
+        },
+        { 
+          rootMargin: '-100px 0px -60% 0px',
+          threshold: 0
+        }
+      );
+
+      observer.observe(element);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
   
   // États pour le formulaire
   const [formData, setFormData] = useState({
@@ -183,54 +213,135 @@ const Portfolio = () => {
       />
       
       {/* 🏠 Section Accueil */}
-      <Box as="section" pt={{ base: 24, md: 28 }} pb={16} px={4} color="gray.800" backgroundColor="sage.200">
-        <Container maxW="6xl">
-          <Flex direction={{ base: 'column', md: 'row' }} align="center" gap={12}>
-            <Box flex={{ md: '0 0 33%' }}>
+      <Box 
+        as="section" 
+        pt={{ base: 28, md: 32 }} 
+        pb={20} 
+        px={4} 
+        bgGradient="linear(to-br, sage.50, white, primary.50)"
+        position="relative"
+        overflow="hidden"
+      >
+        {/* Subtle background pattern */}
+        <Box 
+          position="absolute" 
+          top="0" 
+          left="0" 
+          right="0" 
+          bottom="0" 
+          opacity="0.03"
+          bgImage="radial-gradient(circle, gray.400 1px, transparent 1px)"
+          bgSize="40px 40px"
+        />
+        <Container maxW="6xl" position="relative" zIndex="1">
+          <Flex direction={{ base: 'column', md: 'row' }} align="center" gap={16}>
+            <Box flex={{ md: '0 0 35%' }}>
               <Image 
                 src={CONFIG.photo} 
                 alt={CONFIG.nom}
-                w="64"
-                h="64"
+                w={{ base: 48, md: 64 }}
+                h={{ base: 48, md: 64 }}
                 borderRadius="full"
                 objectFit="cover"
-                boxShadow="xl"
-                border="4px solid white"
+                boxShadow="2xl"
+                border="6px solid white"
                 mx="auto"
+                transition="transform 0.3s ease"
+                _hover={{ transform: 'scale(1.05)' }}
               />
             </Box>
-            <VStack flex={{ md: '0 0 67%' }} align={{ base: 'center', md: 'start' }} gap={6}>
-              <Heading as="h1" id="accueil" size="2xl" textAlign={{ base: 'center', md: 'left' }} scrollMarginTop="24">
+            <VStack flex={{ md: '0 0 65%' }} align={{ base: 'center', md: 'start' }} gap={6}>
+              <Heading 
+                as="h1" 
+                id="accueil" 
+                size={{ base: 'xl', md: '2xl' }} 
+                textAlign={{ base: 'center', md: 'left' }} 
+                scrollMarginTop="24"
+                color="gray.900"
+                fontWeight="800"
+                letterSpacing="-0.02em"
+              >
                 {CONFIG.nom}
               </Heading>
-              <Text fontSize="xl" color="gray.800" textAlign={{ base: 'center', md: 'left' }}>
+              <Badge 
+                colorScheme="sage" 
+                fontSize={{ base: 'md', md: 'lg' }} 
+                px={4} 
+                py={2} 
+                borderRadius="full"
+                fontWeight="600"
+              >
                 {CONFIG.titre}
-              </Text>
-              <Heading as="h2" size="lg" color="gray.700" textAlign={{ base: 'center', md: 'left' }}>
+              </Badge>
+              <Heading 
+                as="h2" 
+                size={{ base: 'md', md: 'lg' }} 
+                color="sage.700" 
+                textAlign={{ base: 'center', md: 'left' }}
+                fontWeight="700"
+                lineHeight="1.3"
+              >
                 {CONFIG.presentation.accroche}
               </Heading>
-              <Text fontSize="lg" color="gray.700" textAlign={{ base: 'center', md: 'left' }} lineHeight="relaxed">
+              <Text 
+                fontSize={{ base: 'md', md: 'lg' }} 
+                color="gray.600" 
+                textAlign={{ base: 'center', md: 'left' }} 
+                lineHeight="1.8"
+                maxW="2xl"
+              >
                 {CONFIG.presentation.description}
               </Text>
-              <HStack gap={4} justify={{ base: 'center', md: 'start' }}>
+              <HStack gap={3} justify={{ base: 'center', md: 'start' }} flexWrap="wrap" pt={4}>
                 <a href={CONFIG.github} target="_blank" rel="noopener noreferrer">
-                  <Button p={3} bg="gray.800" color="white" borderRadius="full" _hover={{ bg: 'gray.700' }}>
-                    <FaGithub size={24} />
+                  <Button 
+                    size="lg" 
+                    bg="gray.900" 
+                    color="white" 
+                    borderRadius="full" 
+                    _hover={{ bg: 'gray.700', transform: 'translateY(-2px)' }}
+                    transition="all 0.3s"
+                    boxShadow="md"
+                  >
+                    <FaGithub size={20} />
                   </Button>
                 </a>
                 <a href={CONFIG.linkedin} target="_blank" rel="noopener noreferrer">
-                    <Button p={3} bg="sage.700" color="white" borderRadius="full" _hover={{ bg: 'sage.600' }}>
-                    <FaLinkedin size={24} />
+                  <Button 
+                    size="lg" 
+                    bg="blue.600" 
+                    color="white" 
+                    borderRadius="full" 
+                    _hover={{ bg: 'blue.500', transform: 'translateY(-2px)' }}
+                    transition="all 0.3s"
+                    boxShadow="md"
+                  >
+                    <FaLinkedin size={20} />
                   </Button>
                 </a>
                 <a href={`mailto:${CONFIG.email}`}>
-                  <Button p={3} bg="green.600" color="white" borderRadius="full" _hover={{ bg: 'green.500' }}>
-                    <FaEnvelope size={24} />
+                  <Button 
+                    size="lg" 
+                    bg="sage.600" 
+                    color="white" 
+                    borderRadius="full" 
+                    _hover={{ bg: 'sage.500', transform: 'translateY(-2px)' }}
+                    transition="all 0.3s"
+                    boxShadow="md"
+                  >
+                    <FaEnvelope size={20} />
                   </Button>
                 </a>
                 {CONFIG.cv && (
                   <a href={CONFIG.cv} target="_blank" rel="noopener noreferrer">
-                    <Button colorScheme="blue" size="md">
+                    <Button 
+                      colorScheme="primary" 
+                      size="lg"
+                      fontWeight="600"
+                      boxShadow="md"
+                      _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
+                      transition="all 0.3s"
+                    >
                       📄 Télécharger mon CV
                     </Button>
                   </a>
@@ -238,19 +349,33 @@ const Portfolio = () => {
               </HStack>
             </VStack>
           </Flex>
-          <Flex justify="center" mt={12}>
-            <Box as={MdKeyboardArrowDown} fontSize="4xl" color="gray.400" animation="bounce 1s infinite" />
+          <Flex justify="center" mt={16}>
+            <Box as={MdKeyboardArrowDown} fontSize="5xl" color="sage.400" animation="bounce 2s infinite" />
           </Flex>
         </Container>
       </Box>
 
       {/* 🎯 Section Compétences */}
-      <Box as="section" py={16} px={4} bg="white">
+      <Box as="section" py={20} px={4} bg="gray.50">
         <Container maxW="6xl">
-          <Heading as="h2" id="competences" size="xl" textAlign="center" color="gray.700" mb={12} scrollMarginTop="24">
-            Mes Compétences
-          </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2 }} gap={8}>
+          <VStack gap={4} mb={12}>
+            <Heading 
+              as="h2" 
+              id="competences" 
+              size="2xl" 
+              textAlign="center" 
+              color="gray.900" 
+              scrollMarginTop="24"
+              fontWeight="800"
+              letterSpacing="-0.02em"
+            >
+              Mes Compétences
+            </Heading>
+            <Text fontSize="lg" color="gray.600" textAlign="center" maxW="2xl">
+              Une progression continue à travers mes années de BUT Informatique
+            </Text>
+          </VStack>
+          <SimpleGrid columns={{ base: 1, md: 2 }} gap={6}>
             {CONFIG.competences.map(comp => {
               // Déterminer le dernier niveau disponible
               const niveauFinal = comp.evolution.but3 || comp.evolution.but2;
@@ -261,26 +386,48 @@ const Portfolio = () => {
               return (
                 <Box 
                   key={comp.id}
-                  border="2px solid"
-                  borderColor={comp.color}
-                  borderRadius="lg"
+                  border="1px solid"
+                  borderColor="gray.200"
+                  borderRadius="xl"
                   p={6}
-                  _hover={{ boxShadow: 'lg', borderColor: comp.color }}
-                  transition="all 0.3s"
                   bg="white"
+                  _hover={{ 
+                    boxShadow: 'xl', 
+                    borderColor: comp.color,
+                    transform: 'translateY(-4px)'
+                  }}
+                  transition="all 0.3s ease"
+                  position="relative"
+                  overflow="hidden"
                 >
-                  <Heading as="h3" size="md" color="accent.800" mb={4} fontWeight="700">
+                  {/* Color accent bar */}
+                  <Box 
+                    position="absolute" 
+                    top="0" 
+                    left="0" 
+                    right="0" 
+                    h="4px" 
+                    bg={comp.color}
+                  />
+                  <Heading as="h3" size="md" color="gray.900" mb={3} fontWeight="700" mt={2}>
                     {comp.titre}
                   </Heading>
-                  <Text fontSize="sm" color="accent.600" mb={6}>
+                  <Text fontSize="sm" color="gray.600" mb={6} lineHeight="1.6">
                     {comp.description}
                   </Text>
 
                   {/* Affichage du dernier niveau (replié par défaut) */}
                   <VStack align="stretch" gap={4} mb={6}>
-                    <Box borderLeft="4px solid" borderLeftColor="success.500" pl={4} py={3} bg="success.50" borderRadius="md">
+                    <Box 
+                      borderLeft="3px solid" 
+                      borderLeftColor="success.500" 
+                      pl={4} 
+                      py={3} 
+                      bg="success.50" 
+                      borderRadius="md"
+                    >
                       <HStack gap={2} mb={2}>
-                        <Badge colorScheme="green" fontSize="xs" fontWeight="bold">
+                        <Badge colorScheme="green" fontSize="xs" fontWeight="bold" borderRadius="full" px={3}>
                           {levelBut === 'but3' ? 'BUT3 (Actuel)' : 'BUT2 (Actuel)'}
                         </Badge>
                         <Text fontSize="sm" fontWeight="bold" color="success.700">
@@ -341,15 +488,16 @@ const Portfolio = () => {
                     size="sm"
                     w="full"
                     mb={4}
-                    color="sage.600"
+                    color="sage.700"
                     _hover={{ bg: 'sage.50' }}
                     display="flex"
                     justifyContent="center"
                     gap={2}
                     fontWeight="600"
-                    transition="all 0.3s"
+                    transition="all 0.2s"
+                    borderRadius="md"
                   >
-                    <Text>
+                    <Text fontSize="sm">
                       {isExpanded ? 'Masquer l\'évolution' : 'Voir l\'évolution'}
                     </Text>
                     <Box
@@ -362,7 +510,17 @@ const Portfolio = () => {
 
                   <HStack flexWrap="wrap" gap={2} mb={4}>
                     {comp.technos.map(tech => (
-                      <Badge key={tech} variant="subtle" fontSize="xs" bg="sage.100" color="sage.700">
+                      <Badge 
+                        key={tech} 
+                        variant="subtle" 
+                        fontSize="xs" 
+                        bg="sage.50" 
+                        color="sage.800"
+                        px={3}
+                        py={1}
+                        borderRadius="full"
+                        fontWeight="600"
+                      >
                         {tech}
                       </Badge>
                     ))}
@@ -372,6 +530,8 @@ const Portfolio = () => {
                     color="sage.700"
                     size="sm"
                     onClick={() => handleSelectCompetence(comp.id)}
+                    fontWeight="600"
+                    _hover={{ bg: 'sage.50', color: 'sage.800' }}
                   >
                     → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
                   </Button>
@@ -383,30 +543,60 @@ const Portfolio = () => {
       </Box>
 
       {/* 🧰 Section Technologies */}
-      <Box as="section" py={16} px={4} bg="gray.50">
+      <Box as="section" py={20} px={4} bg="white">
         <Container maxW="6xl">
-          <Heading as="h2" id="technologies" size="xl" textAlign="center" color="gray.700" mb={12} scrollMarginTop="24">
-            Technologies connues
-          </Heading>
+          <VStack gap={4} mb={12}>
+            <Heading 
+              as="h2" 
+              id="technologies" 
+              size="2xl" 
+              textAlign="center" 
+              color="gray.900" 
+              scrollMarginTop="24"
+              fontWeight="800"
+              letterSpacing="-0.02em"
+            >
+              Technologies maîtrisées
+            </Heading>
+            <Text fontSize="lg" color="gray.600" textAlign="center" maxW="2xl">
+              Un aperçu des langages, frameworks et outils que j'utilise au quotidien
+            </Text>
+          </VStack>
           <TechnologiesCarousel items={allTechnologies} />
         </Container>
       </Box>
 
       {/* 📁 Section Projets */}
-      <Box as="section" py={16} px={4} bg="gray.50">
+      <Box as="section" py={20} px={4} bg="gray.50">
         <Container maxW="6xl">
-          <Heading as="h2" id="projets" size="xl" textAlign="center" color="gray.700" mb={12} scrollMarginTop="24">
-            Mes Projets
-          </Heading>
-          <VStack gap={4} mb={8}>
-            <HStack gap={2} justify="center" flexWrap="wrap">
+          <VStack gap={4} mb={12}>
+            <Heading 
+              as="h2" 
+              id="projets" 
+              size="2xl" 
+              textAlign="center" 
+              color="gray.900" 
+              scrollMarginTop="24"
+              fontWeight="800"
+              letterSpacing="-0.02em"
+            >
+              Mes Projets
+            </Heading>
+            <Text fontSize="lg" color="gray.600" textAlign="center" maxW="2xl">
+              Une sélection de mes réalisations académiques et professionnelles
+            </Text>
+          </VStack>
+          <VStack gap={6} mb={10}>
+            <HStack gap={2} justify="center" flexWrap="wrap" bg="white" p={4} borderRadius="xl" boxShadow="sm">
               <Button
                 size="sm"
                 variant={selectedCompetence === null ? 'solid' : 'outline'}
                 colorScheme="sage"
                 onClick={() => handleSelectCompetence(null)}
+                borderRadius="full"
+                fontWeight="600"
               >
-                Toutes les compétences
+                Tous les projets
               </Button>
               {CONFIG.competences.map(c => (
                 <Button
@@ -416,28 +606,57 @@ const Portfolio = () => {
                   colorScheme="sage"
                   onClick={() => setSelectedCompetence(c.id)}
                   title={c.titre}
+                  borderRadius="full"
+                  fontWeight="600"
                 >
                   {c.titre.length > 24 ? `${c.titre.substring(0, 24)}…` : c.titre}
                 </Button>
               ))}
             </HStack>
             {selectedCompetence && (
-              <Text fontSize="sm" color="gray.600">
-                Filtre actif: {CONFIG.competences.find(c => c.id === selectedCompetence)?.titre}
-                {' '}
-                <Button variant="ghost" color="sage.700" size="sm" onClick={() => setSelectedCompetence(null)}>Effacer</Button>
-              </Text>
+              <HStack 
+                gap={2} 
+                bg="sage.50" 
+                px={4} 
+                py={2} 
+                borderRadius="full"
+                fontSize="sm"
+                color="sage.800"
+              >
+                <Text fontWeight="600">
+                  Filtre: {CONFIG.competences.find(c => c.id === selectedCompetence)?.titre}
+                </Text>
+                <Button 
+                  variant="ghost" 
+                  color="sage.700" 
+                  size="xs" 
+                  onClick={() => setSelectedCompetence(null)}
+                  _hover={{ bg: 'sage.100' }}
+                >
+                  ✕
+                </Button>
+              </HStack>
             )}
           </VStack>
-          <VStack gap={8}>
+          <VStack gap={10}>
             {projetsProfessionnels.length > 0 && (
               <Box w="full">
-                <Heading as="h3" size="lg" color="gray.700" mb={4}>
-                  Expériences professionnelles
+                <Heading as="h3" size="lg" color="gray.900" mb={6} fontWeight="700">
+                  💼 Expériences professionnelles
                 </Heading>
                 <VStack gap={6}>
                   {projetsProfessionnels.map(projet => (
-                    <Box key={projet.id} bg="white" borderRadius="lg" overflow="hidden" boxShadow="md">
+                    <Box 
+                      key={projet.id} 
+                      bg="white" 
+                      borderRadius="xl" 
+                      overflow="hidden" 
+                      boxShadow="md"
+                      border="1px solid"
+                      borderColor="gray.200"
+                      _hover={{ boxShadow: 'xl', transform: 'translateY(-4px)' }}
+                      transition="all 0.3s ease"
+                    >
                       {renderProjectInner(projet)}
                     </Box>
                   ))}
@@ -447,12 +666,22 @@ const Portfolio = () => {
 
             {projetsScolaires.length > 0 && (
               <Box w="full">
-                <Heading as="h3" size="lg" color="gray.700" mb={4}>
-                  Projets scolaires & personnels
+                <Heading as="h3" size="lg" color="gray.900" mb={6} fontWeight="700">
+                  🎓 Projets scolaires & personnels
                 </Heading>
                 <VStack gap={6}>
                   {projetsScolaires.map(projet => (
-                    <Box key={projet.id} bg="white" borderRadius="lg" overflow="hidden" boxShadow="md">
+                    <Box 
+                      key={projet.id} 
+                      bg="white" 
+                      borderRadius="xl" 
+                      overflow="hidden" 
+                      boxShadow="md"
+                      border="1px solid"
+                      borderColor="gray.200"
+                      _hover={{ boxShadow: 'xl', transform: 'translateY(-4px)' }}
+                      transition="all 0.3s ease"
+                    >
                       {renderProjectInner(projet)}
                     </Box>
                   ))}
@@ -464,51 +693,77 @@ const Portfolio = () => {
       </Box>
 
       {/* 📧 Section Contact */}
-      <Box as="section" py={16} px={4} bg="gray.50" color="gray.700">
+      <Box as="section" py={20} px={4} bg="white">
         <Container maxW="3xl">
-          <Heading as="h2" id="contact" size="xl" textAlign="center" mb={12} scrollMarginTop="24">
-            Me Contacter
-          </Heading>
+          <VStack gap={4} mb={12}>
+            <Heading 
+              as="h2" 
+              id="contact" 
+              size="2xl" 
+              textAlign="center" 
+              scrollMarginTop="24"
+              color="gray.900"
+              fontWeight="800"
+              letterSpacing="-0.02em"
+            >
+              Me Contacter
+            </Heading>
+            <Text fontSize="lg" color="gray.600" textAlign="center" maxW="2xl">
+              Une question, un projet ou simplement envie d'échanger ? N'hésitez pas à me contacter
+            </Text>
+          </VStack>
           
           {/* Carte du formulaire */}
           <Box 
-            bg="white" 
-            borderRadius="lg" 
-            boxShadow="md" 
+            bg="gray.50" 
+            borderRadius="xl" 
+            boxShadow="lg" 
             p={8}
             border="1px solid"
             borderColor="gray.200"
-            mb={8}
+            mb={10}
           >
             <VStack gap={6}>
               <Box w="full">
-                <Text mb={2} fontWeight="medium">Nom complet</Text>
+                <Text mb={2} fontWeight="600" color="gray.700">Nom complet</Text>
                 <Input 
                   type="text"
                   name="nom"
                   value={formData.nom}
                   onChange={handleInputChange}
                   placeholder="Votre nom"
+                  size="lg"
+                  bg="white"
+                  borderColor="gray.300"
+                  _focus={{ borderColor: 'sage.500', boxShadow: '0 0 0 1px var(--chakra-colors-sage-500)' }}
                 />
               </Box>
               <Box w="full">
-                <Text mb={2} fontWeight="medium">Email</Text>
+                <Text mb={2} fontWeight="600" color="gray.700">Email</Text>
                 <Input 
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="votre.email@exemple.fr"
+                  size="lg"
+                  bg="white"
+                  borderColor="gray.300"
+                  _focus={{ borderColor: 'sage.500', boxShadow: '0 0 0 1px var(--chakra-colors-sage-500)' }}
                 />
               </Box>
               <Box w="full">
-                <Text mb={2} fontWeight="medium">Message</Text>
+                <Text mb={2} fontWeight="600" color="gray.700">Message</Text>
                 <Textarea 
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={6}
                   placeholder="Votre message..."
+                  size="lg"
+                  bg="white"
+                  borderColor="gray.300"
+                  _focus={{ borderColor: 'sage.500', boxShadow: '0 0 0 1px var(--chakra-colors-sage-500)' }}
                 />
               </Box>
               <Button 
@@ -516,26 +771,47 @@ const Portfolio = () => {
                 w="full"
                 colorScheme="sage"
                 size="lg"
-                borderColor={"gray.700"}
+                fontWeight="700"
+                _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
+                transition="all 0.3s"
               >
                 Envoyer le message
               </Button>
             </VStack>
           </Box>
           
-          <Box borderTop="1px" borderColor="gray.200" />
+          <Box borderTop="2px" borderColor="gray.100" py={8} />
           
-          <VStack gap={4} mt={12}>
-            <Text color="gray.700">Ou contactez-moi directement :</Text>
+          <VStack gap={6}>
+            <Text color="gray.700" fontSize="lg" fontWeight="600">Ou contactez-moi directement :</Text>
             <HStack gap={6} justify="center" flexWrap="wrap">
-              <Link href={`mailto:${CONFIG.email}`} color="sage.500">
-                {CONFIG.email}
+              <Link 
+                href={`mailto:${CONFIG.email}`} 
+                color="sage.600" 
+                fontWeight="600"
+                _hover={{ color: 'sage.700', textDecoration: 'underline' }}
+              >
+                📧 {CONFIG.email}
               </Link>
-              <Link href={CONFIG.linkedin} target="_blank" rel="noopener noreferrer" color="sage.500">
-                LinkedIn
+              <Link 
+                href={CONFIG.linkedin} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                color="sage.600"
+                fontWeight="600"
+                _hover={{ color: 'sage.700', textDecoration: 'underline' }}
+              >
+                💼 LinkedIn
               </Link>
-              <Link href={CONFIG.github} target="_blank" rel="noopener noreferrer" color="sage.500">
-                GitHub
+              <Link 
+                href={CONFIG.github} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                color="sage.600"
+                fontWeight="600"
+                _hover={{ color: 'sage.700', textDecoration: 'underline' }}
+              >
+                👨‍💻 GitHub
               </Link>
             </HStack>
           </VStack>
@@ -543,12 +819,44 @@ const Portfolio = () => {
       </Box>
 
       {/* 👣 Footer */}
-      <Box as="footer" bg="gray.900" color="white" py={8} px={4}>
-        <Container maxW="6xl" textAlign="center">
-          <Text>© 2025 {CONFIG.nom} - Portfolio BUT Informatique</Text>
-          <Text fontSize="sm" color="gray.400" mt={2}>
-            Développé avec React, TypeScript & Chakra UI
-          </Text>
+      <Box as="footer" bg="gray.900" color="white" py={12} px={4}>
+        <Container maxW="6xl">
+          <VStack gap={4}>
+            <Text fontSize="lg" fontWeight="700">© 2025 {CONFIG.nom}</Text>
+            <Text fontSize="sm" color="gray.400">
+              Portfolio BUT Informatique - Développé avec ❤️ en React, TypeScript & Chakra UI
+            </Text>
+            <HStack gap={4} pt={4}>
+              <Link 
+                href={CONFIG.github} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                color="gray.400"
+                _hover={{ color: 'white' }}
+                transition="color 0.2s"
+              >
+                <FaGithub size={24} />
+              </Link>
+              <Link 
+                href={CONFIG.linkedin} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                color="gray.400"
+                _hover={{ color: 'white' }}
+                transition="color 0.2s"
+              >
+                <FaLinkedin size={24} />
+              </Link>
+              <Link 
+                href={`mailto:${CONFIG.email}`}
+                color="gray.400"
+                _hover={{ color: 'white' }}
+                transition="color 0.2s"
+              >
+                <FaEnvelope size={24} />
+              </Link>
+            </HStack>
+          </VStack>
         </Container>
       </Box>
     </>

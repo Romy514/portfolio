@@ -7,11 +7,37 @@ interface TechnologiesCarouselProps {
 
 const TechnologiesCarousel = ({ items, title = 'Technologies connues' }: TechnologiesCarouselProps) => {
   return (
-    <Box bg="white" borderRadius="lg" boxShadow="md" p={4} border="1px solid" borderColor="gray.200">
-      <Heading as="h3" size="md" color="gray.700" mb={3}>{title}</Heading>
-      <HStack gap={3} flexWrap="wrap">
+    <Box 
+      bg="white" 
+      borderRadius="xl" 
+      boxShadow="md" 
+      p={6} 
+      border="1px solid" 
+      borderColor="gray.200"
+    >
+      <Heading as="h3" size="md" color="gray.900" mb={6} fontWeight="700">{title}</Heading>
+      <HStack gap={3} flexWrap="wrap" justify="center">
         {items.map((tech) => (
-          <Badge key={tech} variant="subtle" fontSize="sm" bg="sage.100" color="sage.700" px={3} py={2} borderRadius="md">
+          <Badge 
+            key={tech} 
+            variant="subtle" 
+            fontSize="sm" 
+            bg="sage.50" 
+            color="sage.800" 
+            px={4} 
+            py={2} 
+            borderRadius="full"
+            fontWeight="600"
+            border="1px solid"
+            borderColor="sage.200"
+            _hover={{ 
+              bg: 'sage.100', 
+              transform: 'translateY(-2px)',
+              boxShadow: 'sm'
+            }}
+            transition="all 0.2s"
+            cursor="default"
+          >
             {tech}
           </Badge>
         ))}

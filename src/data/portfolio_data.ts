@@ -5,7 +5,7 @@ export const CONFIG = {
   email: "romy.chauviere@gmail.com",
   github: "https://github.com/romy514",
   linkedin: "https://linkedin.com/in/romychauviere",
-  cv: "/assets/CV_CHAUVIERE_Romy.pdf",
+  cv: "/portfolio/assets/CV_CHAUVIERE_Romy.pdf",
   
   presentation: {
     accroche: "Passionnée par le développement logiciel et l'innovation technologique",

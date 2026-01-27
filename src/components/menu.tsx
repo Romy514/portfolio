@@ -30,8 +30,9 @@ const MenuPortfolio = ({ activeSection = 'accueil', scrollToSection }: MenuPortf
       position="fixed" 
       top="0" 
       w="100%" 
-      bg="white" 
-      boxShadow="lg" 
+      bg="white/90" 
+      backdropFilter="blur(12px)"
+      boxShadow="sm" 
       zIndex="50"
       borderBottom="1px"
       borderBottomColor="gray.100"
@@ -40,31 +41,35 @@ const MenuPortfolio = ({ activeSection = 'accueil', scrollToSection }: MenuPortf
         <Flex justify="space-between" align="center" h="20" gap="4">
           {/* Logo */}
           <Box 
-            fontSize="2xl" 
-            fontWeight="bold" 
+            fontSize="xl" 
+            fontWeight="800" 
             bgGradient="linear(to-r, sage.600, sage.700)" 
             bgClip="text"
             color="transparent"
             flexShrink={0}
+            letterSpacing="-0.02em"
           >
             Portfolio
           </Box>
 
           {/* Menu Desktop */}
           {isDesktop && (
-            <HStack gap="8" ml="auto">
+            <HStack gap="2" ml="auto">
               {sections.map(section => (
                 <Button
                   key={section.id}
                   variant="ghost"
                   onClick={() => handleSectionClick(section.id)}
-                  fontSize="base"
-                  fontWeight={activeSection === section.id ? 'bold' : 'medium'}
-                  color={activeSection === section.id ? 'sage.600' : 'gray.600'}
+                  fontSize="sm"
+                  fontWeight={activeSection === section.id ? '700' : '600'}
+                  color={activeSection === section.id ? 'sage.700' : 'gray.600'}
                   position="relative"
-                  _hover={{ color: 'sage.600' }}
-                  borderBottomWidth={activeSection === section.id ? '2px' : '0px'}
+                  _hover={{ color: 'sage.700', bg: 'sage.50' }}
+                  borderRadius="md"
+                  px={4}
+                  borderBottomWidth={activeSection === section.id ? '3px' : '0px'}
                   borderBottomColor="sage.600"
+                  borderBottomRadius="0"
                 >
                   {section.label}
                 </Button>
