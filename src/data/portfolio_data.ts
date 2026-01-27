@@ -4,7 +4,7 @@ export const CONFIG = {
   photo: "/portfolio/assets/profil.jpg",
   email: "romy.chauviere@gmail.com",
   github: "https://github.com/romy514",
-  linkedin: "https://linkedin.com/in/romychauviere",
+  linkedin: "https://linkedin.com/in/romy-chauviere",
   cv: "/portfolio/assets/CV_CHAUVIERE_Romy.pdf",
   
   presentation: {
@@ -251,7 +251,7 @@ export const CONFIG = {
         "Gestion de projet, Kanban, travail d'équipe"
       ],
       lienGithub: "https://github.com/Romy514/bomberman",
-      demo: "https://romyy514.itch.io/bomberman",
+      lienDemo: "https://romyy514.itch.io/bomberman",
     },
     
   ],

@@ -212,7 +212,8 @@ const Portfolio = () => {
         pt={{ base: 28, md: 32 }} 
         pb={20} 
         px={4} 
-        bgGradient="linear(to-br, white, sage.50, white)"
+        bg="white"
+        bgGradient="linear(to-br, white, sage.100, white)"
         position="relative"
         overflow="hidden"
       >
@@ -223,9 +224,9 @@ const Portfolio = () => {
           left="0" 
           right="0" 
           bottom="0" 
-          opacity="0.03"
-          bgImage="radial-gradient(circle, gray.400 1px, transparent 1px)"
-          bgSize="40px 40px"
+          opacity="0.4"
+          bgImage="radial-gradient(#cbd5e1 1px, transparent 1px)"
+          bgSize="32px 32px"
         />
         <Container maxW="6xl" position="relative" zIndex="1">
           <Flex direction={{ base: 'column', md: 'row' }} align="center" gap={16}>
