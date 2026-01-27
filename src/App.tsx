@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Box, Container, SimpleGrid, VStack, HStack, Text, Heading, Image, Button, Input, Textarea, Badge, Flex, Link } from '@chakra-ui/react'
+import { Box, Container, SimpleGrid, VStack, HStack, Text, Heading, Image, Button, Input, Textarea, Badge, Flex, Link, DialogRoot, DialogContent, DialogHeader, DialogBody, DialogFooter, DialogCloseTrigger, DialogBackdrop, DialogPositioner } from '@chakra-ui/react'
 import { CONFIG } from '@/data/portfolio_data.ts'
 import type { Competence, Projet } from './types/portfolio_types';
 import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa'
@@ -10,8 +10,9 @@ import TechnologiesCarousel from '@/components/ui/technologies-carousel.tsx';
 const Portfolio = () => {
 
   const [activeSection, setActiveSection] = useState('accueil');
-  const [expandedComps, setExpandedComps] = useState<Set<string>>(new Set());
+  const [selectedCompetenceModal, setSelectedCompetenceModal] = useState<Competence | null>(null);
   const [selectedCompetence, setSelectedCompetence] = useState<Competence['id'] | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   // Observer pour détecter la section visible lors du scroll
   useEffect(() => {
@@ -50,15 +51,14 @@ const Portfolio = () => {
     message: ''
   });
 
-  // Fonction pour basculer l'expansion d'une compétence
-  const toggleCompetence = (compId: string) => {
-    const newExpanded = new Set(expandedComps);
-    if (newExpanded.has(compId)) {
-      newExpanded.delete(compId);
-    } else {
-      newExpanded.add(compId);
-    }
-    setExpandedComps(newExpanded);
+  // Fonction pour ouvrir le modal d'une compétence
+  const openCompetenceModal = (comp: Competence) => {
+    setSelectedCompetenceModal(comp);
+    setIsDialogOpen(true);
+  };
+
+  const closeCompetenceModal = () => {
+    setIsDialogOpen(false);
   };
 
   // Fonction pour obtenir les projets liés à une compétence
@@ -380,8 +380,6 @@ const Portfolio = () => {
               // Déterminer le dernier niveau disponible
               const niveauFinal = comp.evolution.but3 || comp.evolution.but2;
               const levelBut = comp.evolution.but3 ? 'but3' : 'but2';
-              const isExpanded = expandedComps.has(comp.id);
-              const hasMultipleLevels = comp.evolution.but3 ? true : false;
               
               return (
                 <Box 
@@ -416,74 +414,32 @@ const Portfolio = () => {
                     {comp.description}
                   </Text>
 
-                  {/* Affichage du dernier niveau (replié par défaut) */}
-                  <VStack align="stretch" gap={4} mb={6}>
-                    <Box 
-                      borderLeft="3px solid" 
-                      borderLeftColor="success.500" 
-                      pl={4} 
-                      py={3} 
-                      bg="success.50" 
-                      borderRadius="md"
-                    >
-                      <HStack gap={2} mb={2}>
-                        <Badge colorScheme="green" fontSize="xs" fontWeight="bold" borderRadius="full" px={3}>
-                          {levelBut === 'but3' ? 'BUT3 (Actuel)' : 'BUT2 (Actuel)'}
-                        </Badge>
-                        <Text fontSize="sm" fontWeight="bold" color="success.700">
-                          {niveauFinal.niveau}
-                        </Text>
-                      </HStack>
-                      <Text fontSize="xs" color="accent.700" lineHeight="1.5">
-                        {niveauFinal.apprentissages}
+                  {/* Affichage du dernier niveau */}
+                  <Box 
+                    borderLeft="3px solid" 
+                    borderLeftColor="success.500" 
+                    pl={4} 
+                    py={3} 
+                    bg="success.50" 
+                    borderRadius="md"
+                    mb={6}
+                  >
+                    <HStack gap={2} mb={2}>
+                      <Badge colorScheme="green" fontSize="xs" fontWeight="bold" borderRadius="full" px={3}>
+                        {levelBut === 'but3' ? 'BUT3 (Actuel)' : 'BUT2 (Actuel)'}
+                      </Badge>
+                      <Text fontSize="sm" fontWeight="bold" color="success.700">
+                        {niveauFinal.niveau}
                       </Text>
-                    </Box>
+                    </HStack>
+                    <Text fontSize="xs" color="accent.700" lineHeight="1.5">
+                      {niveauFinal.apprentissages}
+                    </Text>
+                  </Box>
 
-                    {/* Section dépliable - Evolution complète */}
-                    {isExpanded && (
-                      <>
-                        {/* Flèche unique si 2 niveaux, 2 flèches si 3 niveaux */}
-                        <Text textAlign="center" color="accent.400" fontSize="lg" fontWeight="bold">↑</Text>
-
-                        {/* BUT2 (si on est en BUT3) */}
-                        {comp.evolution.but3 && (
-                          <Box borderLeft="4px solid" borderLeftColor="primary.400" pl={4} py={3} bg="primary.50" borderRadius="md">
-                            <HStack gap={2} mb={2}>
-                              <Badge colorScheme="blue" fontSize="xs" fontWeight="bold">BUT2</Badge>
-                              <Text fontSize="sm" fontWeight="bold" color="primary.700">
-                                {comp.evolution.but2.niveau}
-                              </Text>
-                            </HStack>
-                            <Text fontSize="xs" color="accent.700" lineHeight="1.5">
-                              {comp.evolution.but2.apprentissages}
-                            </Text>
-                          </Box>
-                        )}
-
-                        {/* Deuxième flèche seulement si 3 niveaux */}
-                        {hasMultipleLevels && (
-                          <Text textAlign="center" color="accent.400" fontSize="lg" fontWeight="bold">↑</Text>
-                        )}
-
-                        {/* BUT1 */}
-                        <Box borderLeft="4px solid" borderLeftColor="primary.300" pl={4} py={3} bg="primary.100" borderRadius="md">
-                          <HStack gap={2} mb={2}>
-                            <Badge colorScheme="cyan" fontSize="xs" fontWeight="bold">BUT1</Badge>
-                            <Text fontSize="sm" fontWeight="bold" color="primary.900">
-                              {comp.evolution.but1.niveau}
-                            </Text>
-                          </HStack>
-                          <Text fontSize="xs" color="accent.700" lineHeight="1.5">
-                            {comp.evolution.but1.apprentissages}
-                          </Text>
-                        </Box>
-                      </>
-                    )}
-                  </VStack>
-
-                  {/* Bouton pour déployer */}
+                  {/* Bouton pour voir l'évolution dans un modal */}
                   <Button
-                    onClick={() => toggleCompetence(comp.id)}
+                    onClick={() => openCompetenceModal(comp)}
                     variant="ghost"
                     size="sm"
                     w="full"
@@ -498,12 +454,10 @@ const Portfolio = () => {
                     borderRadius="md"
                   >
                     <Text fontSize="sm">
-                      {isExpanded ? 'Masquer l\'évolution' : 'Voir l\'évolution'}
+                      Voir l'évolution complète
                     </Text>
                     <Box
                       as={MdKeyboardArrowDown}
-                      transform={isExpanded ? 'rotate(180deg)' : 'rotate(0deg)'}
-                      transition="transform 0.3s"
                       fontSize="xl"
                     />
                   </Button>
@@ -613,30 +567,6 @@ const Portfolio = () => {
                 </Button>
               ))}
             </HStack>
-            {selectedCompetence && (
-              <HStack 
-                gap={2} 
-                bg="sage.50" 
-                px={4} 
-                py={2} 
-                borderRadius="full"
-                fontSize="sm"
-                color="sage.800"
-              >
-                <Text fontWeight="600">
-                  Filtre: {CONFIG.competences.find(c => c.id === selectedCompetence)?.titre}
-                </Text>
-                <Button 
-                  variant="ghost" 
-                  color="sage.700" 
-                  size="xs" 
-                  onClick={() => setSelectedCompetence(null)}
-                  _hover={{ bg: 'sage.100' }}
-                >
-                  ✕
-                </Button>
-              </HStack>
-            )}
           </VStack>
           <VStack gap={10}>
             {projetsProfessionnels.length > 0 && (
@@ -859,6 +789,84 @@ const Portfolio = () => {
           </VStack>
         </Container>
       </Box>
+
+      {/* Dialog pour afficher l'évolution complète d'une compétence */}
+      <DialogRoot open={isDialogOpen} onOpenChange={(e) => setIsDialogOpen(e.open)} size="lg">
+        <DialogBackdrop />
+        <DialogPositioner>
+          <DialogContent>
+            <DialogHeader>
+              Évolution - {selectedCompetenceModal?.titre}
+            </DialogHeader>
+            <DialogCloseTrigger />
+            <DialogBody>
+              {selectedCompetenceModal && (
+                <VStack align="stretch" gap={6}>
+                  {/* BUT3 (si existe) */}
+                  {selectedCompetenceModal.evolution.but3 && (
+                    <Box borderLeft="4px solid" borderLeftColor="success.500" pl={4} py={4} bg="success.50" borderRadius="md">
+                      <HStack gap={2} mb={3}>
+                        <Badge colorScheme="green" fontSize="sm" fontWeight="bold" px={4}>
+                          BUT3 (Actuel)
+                        </Badge>
+                        <Text fontSize="md" fontWeight="bold" color="success.700">
+                          {selectedCompetenceModal.evolution.but3.niveau}
+                        </Text>
+                      </HStack>
+                      <Text fontSize="sm" color="gray.700" lineHeight="1.6" mb={3}>
+                        {selectedCompetenceModal.evolution.but3.apprentissages}
+                      </Text>
+                    </Box>
+                  )}
+
+                  {/* Flèche si 3 niveaux */}
+                  {selectedCompetenceModal.evolution.but3 && (
+                    <Text textAlign="center" color="accent.400" fontSize="2xl" fontWeight="bold">↑</Text>
+                  )}
+
+                  {/* BUT2 */}
+                  <Box borderLeft="4px solid" borderLeftColor="primary.400" pl={4} py={4} bg="primary.50" borderRadius="md">
+                    <HStack gap={2} mb={3}>
+                      <Badge colorScheme="blue" fontSize="sm" fontWeight="bold" px={4}>
+                        BUT2
+                      </Badge>
+                      <Text fontSize="md" fontWeight="bold" color="primary.700">
+                        {selectedCompetenceModal.evolution.but2.niveau}
+                      </Text>
+                    </HStack>
+                    <Text fontSize="sm" color="gray.700" lineHeight="1.6" mb={3}>
+                      {selectedCompetenceModal.evolution.but2.apprentissages}
+                    </Text>
+                  </Box>
+
+                  {/* Flèche toujours présente entre BUT2 et BUT1 */}
+                  <Text textAlign="center" color="accent.400" fontSize="2xl" fontWeight="bold">↑</Text>
+
+                  {/* BUT1 */}
+                  <Box borderLeft="4px solid" borderLeftColor="primary.300" pl={4} py={4} bg="primary.100" borderRadius="md">
+                    <HStack gap={2} mb={3}>
+                      <Badge colorScheme="cyan" fontSize="sm" fontWeight="bold" px={4}>
+                        BUT1
+                      </Badge>
+                      <Text fontSize="md" fontWeight="bold" color="primary.900">
+                        {selectedCompetenceModal.evolution.but1.niveau}
+                      </Text>
+                    </HStack>
+                    <Text fontSize="sm" color="gray.700" lineHeight="1.6" mb={3}>
+                      {selectedCompetenceModal.evolution.but1.apprentissages}
+                    </Text>
+                  </Box>
+                </VStack>
+              )}
+            </DialogBody>
+            <DialogFooter>
+              <Button colorScheme="gray" onClick={closeCompetenceModal}>
+                Fermer
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </DialogPositioner>
+      </DialogRoot>
     </>
   );
 };
