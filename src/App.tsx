@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Box, Container, SimpleGrid, VStack, HStack, Text, Heading, Image, Button, Input, Textarea, Badge, Flex, Link, DialogRoot, DialogContent, DialogHeader, DialogBody, DialogFooter, DialogCloseTrigger, DialogBackdrop, DialogPositioner } from '@chakra-ui/react'
 import { CONFIG } from '@/data/portfolio_data.ts'
-import type { Competence, Projet, Technology } from './types/portfolio_types';
+import type { Competence, Projet } from './types/portfolio_types';
 import { FaGithub, FaLinkedin, FaEnvelope, FaExternalLinkAlt } from 'react-icons/fa'
 import { MdKeyboardArrowDown } from 'react-icons/md'
 import MenuPortfolio from '@/components/menu.tsx';

@@ -1,4 +1,4 @@
-import { Box, SimpleGrid, VStack, Text, Icon } from '@chakra-ui/react'
+import { Box, SimpleGrid, VStack, Text } from '@chakra-ui/react'
 import type { Technology } from '@/types/portfolio_types';
 import * as FaIcons from 'react-icons/fa'
 import * as SiIcons from 'react-icons/si'
