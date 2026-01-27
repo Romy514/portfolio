@@ -49,7 +49,7 @@ const MenuPortfolio = ({ activeSection = 'accueil', scrollToSection }: MenuPortf
             flexShrink={0}
             letterSpacing="-0.02em"
           >
-            Portfolio
+            Portfolio Romy Chauvière
           </Box>
 
           {/* Menu Desktop */}
