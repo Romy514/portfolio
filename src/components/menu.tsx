@@ -42,10 +42,8 @@ const MenuPortfolio = ({ activeSection = 'accueil', scrollToSection }: MenuPortf
           {/* Logo */}
           <Box 
             fontSize="xl" 
-            fontWeight="800" 
-            bgGradient="linear(to-r, sage.600, sage.700)" 
-            bgClip="text"
-            color="transparent"
+            fontWeight="800"
+            color="sage.700" 
             flexShrink={0}
             letterSpacing="-0.02em"
           >

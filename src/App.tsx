@@ -379,6 +379,8 @@ const Portfolio = () => {
               return (
                 <Box 
                   key={comp.id}
+                  display="flex"
+                  flexDirection="column"
                   border="1px solid"
                   borderColor="gray.200"
                   borderRadius="xl"
@@ -481,6 +483,9 @@ const Portfolio = () => {
                     onClick={() => handleSelectCompetence(comp.id)}
                     fontWeight="600"
                     _hover={{ bg: 'sage.50', color: 'sage.800' }}
+                    mt="auto"
+                    alignSelf="flex-start"
+                    px={0}
                   >
                     → {getProjetsParCompetence(comp.id).length} projet(s) lié(s)
                   </Button>
